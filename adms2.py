@@ -969,7 +969,7 @@ class TCPServer:
 
 # Jalankan server
 if __name__ == "__main__":
-    server = TCPServer(server_ip="0.0.0.0", port=8081, max_buffer_size=1024 * 1024 * 2)
+    server = TCPServer(server_ip="103.127.136.45", port=8080, max_buffer_size=1024 * 1024 * 2)
     server_thread = threading.Thread(target=server.start_listening, daemon=True)
     server_thread.start()
 

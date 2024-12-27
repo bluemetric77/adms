@@ -1,6 +1,7 @@
 from Dal.UserInfoDal import UserInfoDal
 from Model.UserInfoModel import UserInfoModel
 import pandas as pd
+from typing import List
 
 class UserInfoBll:
     def __init__(self):
@@ -15,13 +16,15 @@ class UserInfoBll:
     def get(self, pin: str) -> UserInfoModel:
         return self._dal.get(pin)
 
-    def get_multiple(self, pins: list[str]) -> list[UserInfoModel]:
+    def get_multiple(self, pins: List[str]) -> List[UserInfoModel]:
+        if not pins:
+            return []
         return self._dal.get(pins)
 
     def get_all(self) -> pd.DataFrame:
         return self._dal.get_all()
 
-    def delete(self, pins: list[str]) -> int:
+    def delete(self, pins: List[str]) -> int:
         return self._dal.delete(pins)
 
     def clear_all(self) -> int:
