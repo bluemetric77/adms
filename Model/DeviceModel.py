@@ -22,7 +22,7 @@ class DeviceModel:
         self.AttLogStamp = "0"
         self.AttPhotoStamp = "0"
         self.OperLogStamp = "0"
-        self.TimeZone = "08:00"
+        self.TimeZone = "07:00"
         self.LastRequestTime = datetime(1900, 1, 1)
         self.IRTempDetectionFunOn = "0"
         self.MaskDetectionFunOn = "0"

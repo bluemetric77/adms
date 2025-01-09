@@ -111,6 +111,7 @@ class TCPServer:
             self.server_socket.listen(5)
             self.listening = True
             print(f"Server listening on {self.server_ip}:{self.port}")
+            Log.write_com("receive",f"Server listening on {self.server_ip}:{self.port}")
 
             while self.listening:
                 try:
@@ -170,12 +171,16 @@ class TCPServer:
         elif "devicecmd?" in str_receive:
             self.device_cmd_process(b_receive, end_socket)
         elif "ping?" in str_receive:
+            self.ping_process(b_receive, end_socket)
             self.send_data_to_device("200 OK", "OK\r\n", end_socket)
             end_socket.close()
         else:
             self.unknown_cmd_process(end_socket)
             Log.write_log(f"Unknown message from device: {str_receive}")
+    def ping_process(self, b_receive, remote_socket):
 
+        return self.send_data_to_device("200 OK", "OK\r\n", b_receive)
+    
     def get_time_number(self, sBuffer):
         numberstr = ""
 

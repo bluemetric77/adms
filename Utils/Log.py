@@ -28,7 +28,7 @@ class Log:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             Log._buffer.append(f"{timestamp}\n{msg}\n")
 
-            if len("".join(Log._buffer)) > 1000 or not cache:
+            if len("".join(Log._buffer)) > 500 or not cache:
                 try:
                     log_file_path = Log._daily_log_file()
                     with open(log_file_path, "a", encoding="utf-8") as f:
