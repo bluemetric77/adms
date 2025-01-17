@@ -107,6 +107,7 @@ class TCPServer:
         try:
             # Inisialisasi server socket
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.server_socket.bind((self.server_ip, self.port))
             self.server_socket.listen(5)
             self.listening = True
@@ -118,7 +119,10 @@ class TCPServer:
                     # Menerima koneksi masuk
                     client_socket, client_address = self.server_socket.accept()
                     print(f"Connection received from {client_address}")
-
+                    
+                    # Atur timeout pada client socket
+                    client_socket.settimeout(10)  
+                    
                     # Konfigurasi buffer
                     client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.max_buffer_size)
                     client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, self.max_buffer_size)
@@ -128,9 +132,15 @@ class TCPServer:
 
                     # Periksa apakah ada data yang diterima
                     if client_socket.recv(1, socket.MSG_PEEK):  # MSG_PEEK untuk memeriksa tanpa mengkonsumsi data
-                        data = client_socket.recv(self.max_buffer_size)
-                        self.analysis(data, client_socket)                        
-
+                        try:
+                            data = client_socket.recv(self.max_buffer_size)
+                            if data:
+                                self.analysis(data, client_socket)   
+                        except socket.timeout:
+                            print(f"Timeout: No data received from {client_address} within 10 seconds.")
+                        finally:
+                            client_socket.close()
+                            print(f"Connection with {client_address} closed.")                                   
                 except Exception as e:
                     print(f"Error handling client: {e}")
 
